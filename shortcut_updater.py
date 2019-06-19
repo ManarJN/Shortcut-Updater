@@ -18,6 +18,20 @@ import win32com.client
 from datetime import datetime
 
 
+# lists studies to overlook
+oldstudies = ['SM04755-PSO-01', 'SM04690-OA-01', 'SM04690-OA-02', 'SM04690-OA-04', 
+              'SM04755-ONC-01', 'SM04646-IPF-01', 'SM04646-IPF-02', 'SM04646-IPF-03']
+
+# doc-specific info 
+doctype = ['DMP', 'eCRF CG', 'SDS', 'UAeCRF']
+doctype1 = ['DMP', 'eCRF', 'SDS', 'UAeCRF']
+doctype_med = dict(DMP='DMP', eCRF='eCRF CG', SDS='SDS', UAeCRF='UAeCRF')
+doctype_long = dict(DMP='-data-management-plan-', eCRF='-ecrf-completion-guidelines-', 
+                    SDS='-study-design-specs-', UAeCRF='-unique-annotated-ecrfs-')
+doctype_ext = dict(DMP='\.pdf$', eCRF='\.pdf$', SDS='\.xlsx$', UAeCRF='\.pdf$')
+doctype_ext1 = dict(DMP='PDF', eCRF='PDF', SDS='XLSX', UAeCRF='PDF')
+
+
 def shortcut_updater(location):
     # initializes logger
     logging.basicConfig(level=logging.DEBUG, filename='H:\\logs\\doc_updates_checker_log.log')
@@ -26,20 +40,7 @@ def shortcut_updater(location):
     
     # initializes email message with legend
     message = '  ~ :  Updated\n** :  Action Needed\n'
-    
-    # lists studies to overlook
-    oldstudies = ['SM04755-PSO-01', 'SM04690-OA-01', 'SM04690-OA-02', 'SM04690-OA-04', 
-                  'SM04755-ONC-01', 'SM04646-IPF-01', 'SM04646-IPF-02', 'SM04646-IPF-03']
-
-    # doc-specific info 
-    doctype = ['DMP', 'eCRF CG', 'SDS', 'UAeCRF']
-    doctype1 = ['DMP', 'eCRF', 'SDS', 'UAeCRF']
-    doctype_med = dict(DMP='DMP', eCRF='eCRF CG', SDS='SDS', UAeCRF='UAeCRF')
-    doctype_long = dict(DMP='-data-management-plan-', eCRF='-ecrf-completion-guidelines-', 
-                        SDS='-study-design-specs-', UAeCRF='-unique-annotated-ecrfs-')
-    doctype_ext = dict(DMP='\.pdf$', eCRF='\.pdf$', SDS='\.xlsx$', UAeCRF='\.pdf$')
-    doctype_ext1 = dict(DMP='PDF', eCRF='PDF', SDS='XLSX', UAeCRF='PDF')
-
+   
     # looks through shortcut folder
     for study in os.listdir(location):
         studypath = os.path.join(location, study)
@@ -92,7 +93,7 @@ def shortcut_updater(location):
                             if curmatch is None:
                                 message += '\n  ** ' + doctype[i] + ': No ' + doctype[i] + ' found. \n             Shortcut points to "' + os.path.basename(realpath) \
                         			       + '\n             Please ensure shortcut, naming convention, and filetype (' + doctype_ext1[doctype1[i]] + ') are correct.' \
-                        			       + '\n             e.g. "sm04690-oa-06' + doctype_long[doctype1[i]] + 'v1-0-2019feb08.' + doctype_ext1[doctype1[i]].lower() + '"'\
+                        			       + '\n             e.g. "ab1234-xx-01' + doctype_long[doctype1[i]] + 'v1-0-2019feb08.' + doctype_ext1[doctype1[i]].lower() + '"'\
                                            + '\n             If you rename the target document, please delete the original shortcut and create a new one.'
 
                             # if shortcut successfully points to file
@@ -154,9 +155,7 @@ def shortcut_updater(location):
     logging.info('Ending at ' + str(datetime.now()))    
     logging.shutdown()                                  
 
-    
-
-shortcut_updater()
+   
 
 
 
